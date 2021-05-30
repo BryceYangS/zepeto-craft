@@ -57,5 +57,9 @@ public class PlayerCredit {
 		this.count += addValue;
 	}
 
+	public void minusCount(int minusValue) {
+		this.count -= minusValue;
+	}
+
 	//== 조회 로직 ==//
 }
