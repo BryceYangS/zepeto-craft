@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 
@@ -14,28 +15,32 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.zepeto.craft.domain.CreditType;
 import com.zepeto.craft.domain.Grade;
+import com.zepeto.craft.domain.Items;
 import com.zepeto.craft.domain.Player;
-import com.zepeto.craft.domain.PlayerCredit;
+import com.zepeto.craft.domain.policy.BuyPolicy;
 import com.zepeto.craft.dto.CreditChargeReqDto;
-import com.zepeto.craft.repository.PlayerCreditRepository;
 
 @SpringBootTest
 @Transactional
-class PlayerCreditServiceTest {
-
+class ItemServiceTest {
+	@Autowired
+	Map<String, BuyPolicy> buyPolicyMap;
+	@Autowired
+	ItemService itemService;
 	@Autowired
 	EntityManager em;
 	@Autowired
 	PlayerCreditService playerCreditService;
-	@Autowired
-	PlayerCreditRepository playerCreditRepository;
 
 	@Test
-	public void 재화충전() throws Exception {
-		//given
-		Player player = Player.builder().grade(Grade.GENERAL).playerCredits(new ArrayList<>()).build();
+	public void 아이템구매() throws Exception {
+		// given
+		Player player = Player.builder()
+			.grade(Grade.GENERAL)
+			.playerCredits(new ArrayList<>())
+			.playerInvetories(new ArrayList<>())
+			.build();
 		em.persist(player);
-
 		List<CreditChargeReqDto> creditChargeReqList = new ArrayList<>();
 
 		CreditChargeReqDto dto1 = new CreditChargeReqDto();
@@ -47,13 +52,12 @@ class PlayerCreditServiceTest {
 		dto2.setCreditType(CreditType.PAID);
 		dto2.setChargeCount(1);
 		creditChargeReqList.add(dto2);
-
-		//when
 		playerCreditService.deposit(player.getId(), creditChargeReqList);
 
-		//then
-		List<PlayerCredit> credits = playerCreditRepository.findByPlayerId(player.getId());
-		assertThat(credits.size()).isEqualTo(2);
+		// when
+		int i = itemService.buyItem(player.getId(), Items.MILK.getId(), 1);
+		em.flush();
+		// then
+		assertThat(i).isEqualTo(0);
 	}
-
 }

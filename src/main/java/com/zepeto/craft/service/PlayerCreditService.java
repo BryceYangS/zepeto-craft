@@ -34,7 +34,7 @@ public class PlayerCreditService {
 	 * 	재화 데이터가 있을 경우 재화 충전 결과 저장
 	 * </comment>
 	 */
-	public Long chargePlayerCredit(Long playerId, List<CreditChargeReqDto> creditChargeReqList) {
+	public Long deposit(Long playerId, List<CreditChargeReqDto> creditChargeReqList) {
 
 		Player player = playerRepository.findById(playerId).get();
 

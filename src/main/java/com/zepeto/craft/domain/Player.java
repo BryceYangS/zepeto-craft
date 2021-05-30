@@ -37,10 +37,18 @@ public class Player {
 	@OneToMany(mappedBy = "player", cascade = CascadeType.ALL)
 	private List<PlayerCredit> playerCredits = new ArrayList<>();
 
+	@OneToMany(mappedBy = "player", cascade = CascadeType.ALL)
+	private List<PlayerInvetory> playerInvetories = new ArrayList<>();
+
 	// 연관관계 메서드
 	private void insertCredit(PlayerCredit playerCredit) {
 		playerCredits.add(playerCredit);
 		playerCredit.player(this);
+	}
+
+	private void insertInventory(PlayerInvetory changeInvetory) {
+		playerInvetories.add(changeInvetory);
+		changeInvetory.player(this);
 	}
 
 	//==비즈니스 로직==//
@@ -66,8 +74,27 @@ public class Player {
 		}
 	}
 
+	/**
+	 * 아이템 구매
+	 * @param changedInvetory
+	 */
+	public void buyItem(PlayerInvetory changedInvetory) {
+
+		Optional<PlayerInvetory> playerInventoryByItemId = playerInvetories.stream()
+			.filter(playerInvetory ->
+				playerInvetory.getId().getItemId() == changedInvetory.getId().getItemId())
+			.findFirst();
+
+		if (playerInventoryByItemId.isPresent()) {
+			playerInventoryByItemId.get().addCount(changedInvetory.getCount());
+			return;
+		}
+
+		insertInventory(changedInvetory);
+	}
+
 	//==조회 로직==/
-	public int getTotalCredits() {
+	public int fetchTotalCredits() {
 		int total = 0;
 		for (PlayerCredit credit : playerCredits) {
 			total += credit.getCount();
