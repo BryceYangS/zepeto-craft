@@ -1,11 +1,14 @@
 package com.zepeto.craft.domain;
 
-import javax.persistence.EmbeddedId;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
 import javax.persistence.Table;
 
 import com.zepeto.craft.dto.CreditChargeReqDto;
@@ -24,31 +27,30 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class PlayerCredit {
 
-	@EmbeddedId
-	private PlayerCreditId id;
+	@Id
+	@GeneratedValue
+	private Long id;
 
-	@MapsId("playerId")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "PLAYER_ID")
 	private Player player;
 
+	@Enumerated(EnumType.STRING)
+	@Column(name = "CREDIT_TYPE")
+	private CreditType creditType;
+
 	private int count;
 
 	//== 생성 메서드 ==//
-	public static PlayerCredit createPlayerCredit(Long playerId, CreditChargeReqDto creditChargeReqDto) {
-		PlayerCreditId playerCreditId = PlayerCreditId.builder()
-			.playerId(playerId)
-			.creditType(creditChargeReqDto.getCreditType()).build();
-
+	public static PlayerCredit createPlayerCredit(CreditChargeReqDto creditChargeReqDto) {
 		return PlayerCredit.builder()
-			.id(playerCreditId)
+			.creditType(creditChargeReqDto.getCreditType())
 			.count(creditChargeReqDto.getChargeCount())
 			.build();
 	}
 
-	public PlayerCredit player(Player player) {
+	public void player(Player player) {
 		this.player = player;
-		return this;
 	}
 
 	//== 비즈니스 로직 ==//

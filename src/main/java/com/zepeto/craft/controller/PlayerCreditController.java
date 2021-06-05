@@ -87,7 +87,7 @@ public class PlayerCreditController {
 		for (PlayerCredit pc : playerCredits) {
 			PlayerCreditDto playerCreditDto = new PlayerCreditDto();
 			playerCreditDto.setPlayerId(playerId);
-			playerCreditDto.setCreditType(pc.getId().getCreditType());
+			playerCreditDto.setCreditType(pc.getCreditType());
 			playerCreditDto.setCount(pc.getCount());
 
 			playerCreditDtos.add(playerCreditDto);

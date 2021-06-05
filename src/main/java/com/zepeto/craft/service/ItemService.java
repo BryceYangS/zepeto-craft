@@ -34,10 +34,10 @@ public class ItemService {
 			throw new NotEnoughCreditException("재화가 부족합니다");
 		}
 
-		BuyPolicy buyPolicy = new PolicyFactory().getBuyPolicy(buyPolicyMap, player);
+		BuyPolicy buyPolicy = PolicyFactory.getBuyPolicy(buyPolicyMap, player);
 		buyPolicy.apply(price, player.getPlayerCredits());
 
-		PlayerInvetory playerInvetory = PlayerInvetory.createPlayerInventory(playerId, itemId, count);
+		PlayerInvetory playerInvetory = PlayerInvetory.createPlayerInventory(itemId, count);
 		player.buyItem(playerInvetory);
 
 		return player.fetchTotalCredits();

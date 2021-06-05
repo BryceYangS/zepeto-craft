@@ -1,11 +1,12 @@
 package com.zepeto.craft.domain;
 
-import javax.persistence.EmbeddedId;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,10 +20,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PlayerInvetory {
 
-	@EmbeddedId
-	private PlayerInvetoryId id;
+	@Id
+	@GeneratedValue
+	private Long id;
 
-	@MapsId("playerId")
+	@Column(name = "ITEM_ID")
+	private Long itemId;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "PLAYER_ID")
 	private Player player;
@@ -30,21 +34,15 @@ public class PlayerInvetory {
 	private int count;
 
 	//== 생성 메서드 ==//
-	public static PlayerInvetory createPlayerInventory(Long playerId, Long itemId, int count) {
-		PlayerInvetoryId playerInventoryId = PlayerInvetoryId.builder()
-			.playerId(playerId)
-			.itemId(itemId)
-			.build();
-
+	public static PlayerInvetory createPlayerInventory(Long itemId, int count) {
 		return PlayerInvetory.builder()
-			.id(playerInventoryId)
+			.itemId(itemId)
 			.count(count)
 			.build();
 	}
 
-	public PlayerInvetory player(Player player) {
+	public void player(Player player) {
 		this.player = player;
-		return this;
 	}
 
 	public void addCount(int itemCount) {

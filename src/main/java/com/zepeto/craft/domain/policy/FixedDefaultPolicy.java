@@ -21,7 +21,7 @@ public class FixedDefaultPolicy implements BuyPolicy {
 		}
 
 		PlayerCredit credit = playerCredits.stream()
-			.filter(pc -> pc.getId().getCreditType() == creditType)
+			.filter(pc -> pc.getCreditType() == creditType)
 			.findFirst()
 			.orElse(null);
 
