@@ -1,7 +1,5 @@
 package com.zepeto.craft.service;
 
-import java.util.Map;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 public class ItemService {
 
 	private final PlayerRepository playerRepository;
-	private final Map<String, BuyPolicy> buyPolicyMap;
+	private final PolicyFactory policyFactory;
 
 	public int buyItem(Long playerId, Long itemId, int count) {
 		Player player = playerRepository.findById(playerId)
@@ -34,7 +32,7 @@ public class ItemService {
 			throw new NotEnoughCreditException("재화가 부족합니다");
 		}
 
-		BuyPolicy buyPolicy = PolicyFactory.getBuyPolicy(buyPolicyMap, player);
+		BuyPolicy buyPolicy = policyFactory.getBuyPolicy(player);
 		buyPolicy.apply(price, player.getPlayerCredits());
 
 		PlayerInvetory playerInvetory = PlayerInvetory.createPlayerInventory(itemId, count);
