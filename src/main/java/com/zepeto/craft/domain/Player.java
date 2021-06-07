@@ -42,13 +42,13 @@ public class Player {
 
 	// 연관관계 메서드
 	private void insertCredit(PlayerCredit playerCredit) {
-		playerCredits.add(playerCredit);
 		playerCredit.player(this);
+		playerCredits.add(playerCredit);
 	}
 
 	private void insertInventory(PlayerInvetory changeInvetory) {
-		playerInvetories.add(changeInvetory);
 		changeInvetory.player(this);
+		playerInvetories.add(changeInvetory);
 	}
 
 	//==비즈니스 로직==//
@@ -62,7 +62,7 @@ public class Player {
 		for (PlayerCredit chargeCredit : chargeCredits) {
 			Optional<PlayerCredit> optionalPlayerCredit = playerCredits.stream()
 				.filter(playerCredit ->
-					playerCredit.getId().getCreditType() == chargeCredit.getId().getCreditType())
+					playerCredit.getCreditType() == chargeCredit.getCreditType())
 				.findFirst();
 
 			if (optionalPlayerCredit.isPresent()) {
@@ -82,7 +82,7 @@ public class Player {
 
 		Optional<PlayerInvetory> playerInventoryByItemId = playerInvetories.stream()
 			.filter(playerInvetory ->
-				playerInvetory.getId().getItemId() == changedInvetory.getId().getItemId())
+				playerInvetory.getItemId().equals(changedInvetory.getItemId()))
 			.findFirst();
 
 		if (playerInventoryByItemId.isPresent()) {

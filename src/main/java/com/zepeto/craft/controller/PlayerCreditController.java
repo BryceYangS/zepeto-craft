@@ -67,12 +67,7 @@ public class PlayerCreditController {
 	@ApiOperation(value = "재화 총량 조회", httpMethod = "GET", notes = "플레이어의 재화를 총량을 조회합니다.")
 	@GetMapping("/credits/{playerId}/total")
 	public ResponseEntity fetchTotalPlayerCredit(@NonNull @PathVariable Long playerId) {
-		List<PlayerCredit> playerCredits = playerCreditRepository.findByPlayerId(playerId);
-
-		int total = 0;
-		for (PlayerCredit pc : playerCredits) {
-			total += pc.getCount();
-		}
+		int total = playerCreditRepository.sumCountByPlayerId(playerId);
 
 		HttpHeaders headers = makeApplicationJsonHeader();
 		return ResponseEntity
@@ -87,7 +82,7 @@ public class PlayerCreditController {
 		for (PlayerCredit pc : playerCredits) {
 			PlayerCreditDto playerCreditDto = new PlayerCreditDto();
 			playerCreditDto.setPlayerId(playerId);
-			playerCreditDto.setCreditType(pc.getId().getCreditType());
+			playerCreditDto.setCreditType(pc.getCreditType());
 			playerCreditDto.setCount(pc.getCount());
 
 			playerCreditDtos.add(playerCreditDto);

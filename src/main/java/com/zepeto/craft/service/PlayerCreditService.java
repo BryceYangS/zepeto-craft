@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.zepeto.craft.domain.Player;
 import com.zepeto.craft.domain.PlayerCredit;
 import com.zepeto.craft.dto.CreditChargeReqDto;
-import com.zepeto.craft.repository.PlayerCreditRepository;
 import com.zepeto.craft.repository.PlayerRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -19,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 public class PlayerCreditService {
 
-	private final PlayerCreditRepository playerCreditRepository;
 	private final PlayerRepository playerRepository;
 
 	/**
@@ -40,7 +38,7 @@ public class PlayerCreditService {
 
 		List<PlayerCredit> playerCredits = new ArrayList<>();
 		for (CreditChargeReqDto dto : creditChargeReqList) {
-			PlayerCredit pc = PlayerCredit.createPlayerCredit(player.getId(), dto);
+			PlayerCredit pc = PlayerCredit.createPlayerCredit(dto);
 			playerCredits.add(pc);
 		}
 

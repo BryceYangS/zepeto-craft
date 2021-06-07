@@ -9,7 +9,7 @@ public interface BuyPolicy {
 
 	int ZERO = 0;
 
-	public void apply(int price, List<PlayerCredit> playerCredits);
+	void apply(int price, List<PlayerCredit> playerCredits);
 
-	public int calculate(int price, CreditType creditType, List<PlayerCredit> playerCredits);
+	int calculate(int price, CreditType creditType, List<PlayerCredit> playerCredits);
 }
